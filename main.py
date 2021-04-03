@@ -64,11 +64,10 @@ def create_dick_from_csv(whats_search=None):
                 test_dict[row[0]].add(f"{row[1]}_{row[2]}")
             elif row[0] not in test_dict:
                 test_dict[row[0]] = {f"{row[1]}_{row[2]}"}
-    return test_dict
+    print(len(test_dict.keys()))
 
 
-# Остаток от экспериментов с json (не надо так делать :D). Json создавал с помощью функции create_dick_from_csv.
-# Для этого добавляем json.dump, а set меняем на list (меняем скобочки в elif и add -> append)
+# Остаток от экспериментов с json (не надо так делать, но это не точно :D).
 @time_counter
 def search_in_json(whats_search):
     with open(".\\tmp\\test_json.json", "r") as test_json:
@@ -88,5 +87,6 @@ def csv_counter(whats_search=None):
 
 if __name__ == '__main__':
     print("-" * 150)
-    csv_counter("1")
+    # csv_counter("1")
+    create_dick_from_csv()
     print("-" * 150)
