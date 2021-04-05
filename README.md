@@ -1,4 +1,4 @@
-# BK CSV test api
+# BC pure python CSV test api
 Тестовое API с поиском по *.csv таблице
 
 ### Dependencies
