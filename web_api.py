@@ -2,7 +2,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import searcher
 import os
 
-CSV_FILE_PATH = os.path.abspath(".\\tmp\\separated csv\\")
+CSV_DIR_PATH = os.path.abspath(".\\tmp\\separated csv\\")
 
 class ServiceHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -33,7 +33,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes("Sorry, but sku is obligatory, rank is optional", 'utf-8'))
             return
-        result = searcher.find_some_row(sku, CSV_FILE_PATH, rank)
+        result = searcher.find_some_row(sku, CSV_DIR_PATH, rank)
         self.end_headers()
         self.wfile.write(bytes(f"{result}", 'utf-8'))
         return
