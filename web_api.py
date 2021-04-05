@@ -1,5 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-import data
+import main
+import os
 
 
 class ServiceHandler(BaseHTTPRequestHandler):
@@ -31,12 +32,23 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes("Sorry, but sku is obligatory, rank is optional", 'utf-8'))
             return
-        result = data.get_rec_sku_csv(sku, rank)
+        result = main.find_some_row(sku, rank)
         self.end_headers()
         self.wfile.write(bytes(f"{result}", 'utf-8'))
         return
 
 
 if __name__ == '__main__':
+    if os.path.isdir(".\\tmp") is False:
+        os.mkdir('.\\tmp')
+    if os.path.isdir(".\\tmp\\test") is False:
+        os.mkdir(".\\tmp\\test")
+
+    new_scv_name = 'new_recommends.csv'
+    if os.path.isfile(f".\\tmp\\{new_scv_name}") is False:
+        main.create_dict_from_csv()
+
+    main.csv_separator()
+
     server = HTTPServer(('127.0.0.1', 5000), ServiceHandler)
     server.serve_forever()
