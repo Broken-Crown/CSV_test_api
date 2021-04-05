@@ -95,18 +95,18 @@ def two_reader_one_writer():
             if os.path.isfile(f".\\tmp\\abc_split\\{cur_row[0][0].lower()}.csv") is True:
                 with open(f".\\tmp\\abc_split\\{cur_row[0][0].lower()}.csv", 'a', newline='') as csvfile_2:
                     writer = csv.writer(csvfile_2, delimiter=' ', quotechar='|')
-                    writer.writerow([cur_row[1],cur_row[2]])
+                    writer.writerow([cur_row[0],cur_row[1],cur_row[2]])
                     csvfile_2.close()
             else:
                 with open(f".\\tmp\\abc_split\\else.csv", 'a', newline='') as csvfile_2:
                     writer = csv.writer(csvfile_2, delimiter=' ', quotechar='|')
-                    writer.writerow([cur_row[1],cur_row[2]])
+                    writer.writerow([cur_row[0],cur_row[1],cur_row[2]])
                     csvfile_2.close()
             i += 1
             print(i)
 
 def create_csv():
-    for i in 'abccdefghijklmnopqrstuvwxyz':
+    for i in 'abccdefghijklmnopqrstuvwxyz1234567890':
         if os.path.isfile(f".\\tmp\\abc_split\\{i}.csv") is False:
             j = open(f'.\\tmp\\abc_split\\{i}.csv', 'w')
             j.close()
