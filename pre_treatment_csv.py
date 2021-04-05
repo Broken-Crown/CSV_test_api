@@ -1,30 +1,19 @@
 import csv
 import os
 import sys
-import time
 
 
-def time_counter(function):
-    def wrapper(value):
-        start_time = time.perf_counter()
-        function(value)
-        end_time = time.perf_counter()
-        print(f"Время выполнения функции {function.__name__} составляет {end_time - start_time}")
-
-    return wrapper
-
-
-# Обычный подсчёт элементов в csv O(n)
 def csv_counter(file_path):
     counter = 0
     with open(file_path, "r") as csv_file:
         for _ in csv_file:
             counter += 1
-    print(counter)
+    return counter
 
 
 class PreTreatmentCSV:
-    def __init__(self, initial_csv_file_path, sorted_csv_file_path, separated_csv_dir_path):
+    def __init__(self, initial_csv_file_path, sorted_csv_file_path=".\\tmp\\sorted_csv.csv",
+                 separated_csv_dir_path=".\\tmp\\separated_csv\\"):
         self.initial_csv_file_path = os.path.abspath(initial_csv_file_path)
         self.sorted_csv_file_path = os.path.abspath(sorted_csv_file_path)
         self.separated_csv_dir_path = os.path.abspath(separated_csv_dir_path)
@@ -110,90 +99,9 @@ class PreTreatmentCSV:
             new_csv_file.close()
 
 
-# @time_counter
-# Пока что работает через жопу.
-def custom_bisect(input_list, value):
-    debug_counter = 0
-    right_border = len(input_list) - 1
-    left_border = 0
-    left_to_right_range = right_border - left_border
-    middle_of_list = left_to_right_range // 2 + left_border
-    while left_to_right_range > 1:
-        debug_counter += 1
-        print(debug_counter)
-        try:
-            checking_value = float(input_list[middle_of_list])
-        except ValueError:
-            middle_of_list += 1
-            checking_value = float(input_list[middle_of_list])
-
-        if checking_value < value:
-            left_border = middle_of_list
-        elif checking_value > value:
-            right_border = middle_of_list
-        elif checking_value == value:
-            return middle_of_list
-
-        left_to_right_range = right_border - left_border
-        middle_of_list = left_to_right_range // 2 + left_border
-    else:
-        if right_border == len(input_list) - 1:
-            return right_border
-        elif left_border == 0:
-            return left_border
-        return middle_of_list + 1
-
-
-# @time_counter
-def find_some_row(searching_value, input_folder, desired_rank=None):
-    if "\\" in input_folder[-1]:
-        input_folder = input_folder[:-1]
-
-    if os.path.isfile(f"{input_folder}\\{searching_value[0].upper()}.csv") is False:
-        print("АХТУНГ!")
-        return None
-
-    if desired_rank is not None:
-        try:
-            desired_rank = float(desired_rank)
-        except ValueError:
-            desired_rank = None  # Вероятно тутъ нужно намеакть API, что что-то пошло не так
-
-    with open(f"{input_folder}\\{searching_value[0].upper()}.csv", newline='') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for row in csv_reader:
-            if row[0] == searching_value:
-                if desired_rank is None:
-                    print(row[1::2])
-                    break
-
-                # Можно и так, но особого профита нет, т.к. приходится вытаскивать ранги
-                # test_tuple = tuple([float(value) for value in row[2::2]])
-                # c = bisect.bisect_right(test_tuple, desired_rank)
-                # print(row[c * 2 + 1::2])
-
-                test_idx = custom_bisect(row, desired_rank)
-                print(row[test_idx - 1::2])
-
-                # for idx in range(2, len(row), 2):  # Думаю, что для "безопасности" тут лучше перебрать каждый элемент
-                #     try:
-                #         rank = float(row[idx])
-                #     except ValueError:
-                #         continue
-                #     if rank >= desired_rank:
-                #         print(row[idx - 1::2])
-                #         break
-                print(row)
-                break
-
-
 if __name__ == '__main__':
-    print("-" * 150)
-
     init_csv_path = ".\\tmp\\recommends.csv"
     sorted_csv_path = ".\\tmp\\new_recommends_1.csv"
-    separated_csv_path = f".\\tmp\\separated csv\\"
+    separated_csv_path = ".\\tmp\\separated csv\\"
 
     PreTreatmentCSV(init_csv_path, sorted_csv_path, separated_csv_path).start_treatment()
-
-    print("-" * 150)
