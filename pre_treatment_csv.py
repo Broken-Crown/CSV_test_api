@@ -1,6 +1,5 @@
 import csv
 import os
-import sys
 
 
 class PreTreatmentCSV:
@@ -18,9 +17,11 @@ class PreTreatmentCSV:
     @staticmethod
     def csv_counter(file_path):
         counter = 0
+
         with open(file_path, "r") as csv_file:
             for _ in csv_file:
                 counter += 1
+
         return counter
 
     def __check_env(self):
