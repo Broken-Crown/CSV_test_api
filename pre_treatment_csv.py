@@ -3,14 +3,6 @@ import os
 import sys
 
 
-def csv_counter(file_path):
-    counter = 0
-    with open(file_path, "r") as csv_file:
-        for _ in csv_file:
-            counter += 1
-    return counter
-
-
 class PreTreatmentCSV:
     def __init__(self, initial_csv_file_path, sorted_csv_file_path=".\\tmp\\sorted_csv.csv",
                  separated_csv_dir_path=".\\tmp\\separated_csv\\"):
@@ -22,6 +14,14 @@ class PreTreatmentCSV:
     def start_treatment(self):
         self.__create_dict_from_csv()
         self.__csv_separator()
+
+    @staticmethod
+    def csv_counter(file_path):
+        counter = 0
+        with open(file_path, "r") as csv_file:
+            for _ in csv_file:
+                counter += 1
+        return counter
 
     def __check_env(self):
         sorted_csv_dir_path = "\\".join(self.sorted_csv_file_path.split("\\")[0:-1])
@@ -36,7 +36,6 @@ class PreTreatmentCSV:
             os.mkdir(self.separated_csv_dir_path)
 
     # Сбор всей csv'ки в словарь. Ключом являются товары, а значением - список строк вида "rate-связанный_товар".
-    @time_counter
     def __create_dict_from_csv(self):
         csv_large_dict = {}
 
@@ -71,7 +70,6 @@ class PreTreatmentCSV:
 
                 csv_writer.writerow(tmp_list)
 
-    @time_counter
     def __csv_separator(self):
         with open(self.sorted_csv_file_path, "r", encoding="utf_8_sig") as csv_file:
             new_file_name = ""

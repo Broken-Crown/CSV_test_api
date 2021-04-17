@@ -1,5 +1,4 @@
 import csv
-import multiprocessing
 import os
 
 
@@ -75,6 +74,7 @@ def getdata(filename, criterion1, criterion2):
     for row in get_data_from_csv(filename, criterion1, criterion2):
         yield row
 
+
 def _get_reader(input_filename, csv_reader, encoding, delimiter):
     """Get the reader instance. This will either open the file, or
     return the csv_reader supplied by the caller.
@@ -84,6 +84,7 @@ def _get_reader(input_filename, csv_reader, encoding, delimiter):
 
     with open(input_filename, newline='', encoding=encoding) as input_fp:
         return csv.reader(input_fp, delimiter=delimiter)
+
 
 def two_reader_one_writer():
     with open('.\\tmp\\recommends.csv', newline='') as csvfile:
@@ -95,15 +96,16 @@ def two_reader_one_writer():
             if os.path.isfile(f".\\tmp\\abc_split\\{cur_row[0][0].lower()}.csv") is True:
                 with open(f".\\tmp\\abc_split\\{cur_row[0][0].lower()}.csv", 'a', newline='') as csvfile_2:
                     writer = csv.writer(csvfile_2, delimiter=' ', quotechar='|')
-                    writer.writerow([cur_row[0],cur_row[1],cur_row[2]])
+                    writer.writerow([cur_row[0], cur_row[1], cur_row[2]])
                     csvfile_2.close()
             else:
                 with open(f".\\tmp\\abc_split\\else.csv", 'a', newline='') as csvfile_2:
                     writer = csv.writer(csvfile_2, delimiter=' ', quotechar='|')
-                    writer.writerow([cur_row[0],cur_row[1],cur_row[2]])
+                    writer.writerow([cur_row[0], cur_row[1], cur_row[2]])
                     csvfile_2.close()
             i += 1
             print(i)
+
 
 def create_csv():
     for i in 'abccdefghijklmnopqrstuvwxyz1234567890':

@@ -2,7 +2,7 @@ import os
 import bisect
 
 
-# Пока что работает через жопу.
+# Метод в разработке
 def custom_bisect(input_list, value):
     debug_counter = 0
     right_border = len(input_list) - 1
