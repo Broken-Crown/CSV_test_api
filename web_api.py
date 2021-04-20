@@ -1,8 +1,11 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import searcher
 import os
+import ssl
 
 _CSV_DIR_PATH = os.path.abspath(".\\tmp\\separated csv\\")
+_KEY_FILE_PATH = ".\\key.pem"
+_CERT_FILE_PATH = ".\\cert.pem"
 
 
 class ServiceHandler(BaseHTTPRequestHandler):
@@ -19,7 +22,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if endpoint == '':
             self.end_headers()
             self.wfile.write(bytes("Hello, we have some products, check it out (example "
-                                   "http://127.0.0.1:5000/product?sku=WP260qJAo6&rank=0.9)", 'utf-8'))
+                                   "https://localhost:443/product?sku=WP260qJAo6&rank=0.9)", 'utf-8'))
             return None
 
         if '?' not in endpoint:
@@ -50,5 +53,12 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    server = HTTPServer(('127.0.0.1', 5000), ServiceHandler)
+    server = HTTPServer(('0.0.0.0', 443), ServiceHandler)
+    server.socket = ssl.wrap_socket(
+        server.socket,
+        keyfile=_KEY_FILE_PATH,
+        certfile=_CERT_FILE_PATH,
+        server_side=True,
+        ssl_version=ssl.PROTOCOL_TLSv1
+    )
     server.serve_forever()
